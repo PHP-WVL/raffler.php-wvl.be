@@ -1,0 +1,22 @@
+// import external style sheets
+@import "bootstrap.min.css";
+@import "bootstrap-theme.min.css";
+
+// import the defaults
+@import "defaults/variables";
+@import "defaults/reset";
+@import "defaults/fonts";
+@import "defaults/typography";
+@import "defaults/helpers";
+@import "defaults/mixins";
+
+// the forms styles
+@import "forms/default";
+
+// partials
+@import "partials/header";
+@import "partials/footer";
+
+// pages
+@import "pages/common"; // common style for all pages
+@import "pages/default"; // page-specific layout
