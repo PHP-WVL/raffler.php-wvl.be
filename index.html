@@ -43,6 +43,18 @@
 			</tbody>
 		</table>
 	</script>
+	<script id="raffler-loaderLeft" type="text/x-handlebars-template">
+		<div class="col-sm-1">
+			<img src="{{path}}" title="{{translate 'Loading...'}}" alt="loader image" />
+		</div>
+		<div class="col-sm-11">{{text}}</div>
+	</script>
+	<script id="raffler-loaderRight" type="text/x-handlebars-template">
+		<div class="col-sm-11">{{text}}</div>
+		<div class="col-sm-1">
+			<img src="{{path}}" title="{{translate 'Loading...'}}" alt="loader image" />
+		</div>
+	</script>
     <script type="text/javascript">
         $(function(){
             var joindIn = new JoindIN();

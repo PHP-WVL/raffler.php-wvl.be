@@ -46,7 +46,9 @@ if (typeof Array.prototype.unique === 'undefined') {
 				// 'Retrieving data. Hang in there!' : 'De data wordt opgehaald. Even geduld...'
 			},
 			templates: {
-				eventList: '#raffler-eventlist'
+				eventList: '#raffler-eventlist',
+				loaderLeft: '#raffler-loaderLeft',
+				loaderRight: '#raffler-loaderRight'
 			},
 			searchResultBtnClass: 'btnUseSearchResult',
 			loader: 'assets/ajax-loader.gif',
@@ -147,8 +149,12 @@ if (typeof Array.prototype.unique === 'undefined') {
 		});
 
 		// Compile templates:
-		var source   = $(self.options.templates.eventList).html();
-		self.options.templates.eventList = Handlebars.compile(source);
+		var tpls = ['eventList', 'loaderLeft', 'loaderRight'];
+		for (var i=0; i < tpls.length; i++) {
+			var tpl = tpls[i];
+			var source   = $(self.options.templates[tpl]).html();
+			self.options.templates[tpl] = Handlebars.compile(source);
+		}
 	};
 
 	/**
@@ -403,17 +409,24 @@ if (typeof Array.prototype.unique === 'undefined') {
 	 * @return string
 	 */
 	Raffler.prototype._addLoader = function _addLoader(text, position) {
+		var self = this;
 		if (typeof position === 'undefined') {
 			position = this.options.defaultLoaderPosition;
 		}
 
 		switch (position) {
 			case 'right':
-				text = '<div class="col-sm-11">' + text + '</div><div class="col-sm-1"><img src="' + this.options.loader + '" title="' + this._t('Loading...') + '" alt="loader image" /></div>';
+				text = self.options.templates.loaderRight({
+					text: text,
+					path: self.options.loader
+				});
 				break;
 			case 'left':
 			default:
-				text = '<div class="col-sm-1"><img src="' + this.options.loader + '" title="' + this._t('Loading...') + '" alt="loader image" /></div><div class="col-sm-11">' + text + '</div>';
+				text = self.options.templates.loaderLeft({
+					text: text,
+					path: self.options.loader
+				});
 				break;
 		}
 
