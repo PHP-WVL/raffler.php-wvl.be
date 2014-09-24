@@ -18,8 +18,31 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/handlebars-v2.0.0.js"></script>
     <script src="js/joindin.js"></script>
     <script src="js/raffler.js"></script>
+	<script id="raffler-eventlist" type="text/x-handlebars-template">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>{{translate 'Event name'}}</th>
+					<th>&nbsp;</th>
+				</tr>
+			</thead>
+			<tbody>
+			{{#each events}}
+				<tr>
+					<td>{{this.name}}</td>
+					<td>
+						<button type="button" class="{{this.btnClass}} btn btn-default btn-xs" id="search-result-{{this.id}}">
+							<span class="glyphicon glyphicon-thumbs-up"></span>
+						</button>
+					</td>
+				</tr>
+			{{/each}}
+			</tbody>
+		</table>
+	</script>
     <script type="text/javascript">
         $(function(){
             var joindIn = new JoindIN();

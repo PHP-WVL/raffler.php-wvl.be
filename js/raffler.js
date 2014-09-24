@@ -16,7 +16,7 @@ if (typeof Array.prototype.unique === 'undefined') {
 	};
 }
 
-(function($){
+(function($, Handlebars){
 	'use strict';
 	
 	/**
@@ -44,6 +44,9 @@ if (typeof Array.prototype.unique === 'undefined') {
 				// provide translations here:
 				// e.g.
 				// 'Retrieving data. Hang in there!' : 'De data wordt opgehaald. Even geduld...'
+			},
+			templates: {
+				eventList: '#raffler-eventlist'
 			},
 			searchResultBtnClass: 'btnUseSearchResult',
 			loader: 'assets/ajax-loader.gif',
@@ -84,6 +87,9 @@ if (typeof Array.prototype.unique === 'undefined') {
 		this._winners = {};
 		this._commenters = {};
 
+		// Init Handlebars stuff
+		this._initHandlebars();
+
 		// Hide stuff
 		this._hideMessage();
 		$(this.options.selectors.frmSearch).hide();
@@ -117,11 +123,32 @@ if (typeof Array.prototype.unique === 'undefined') {
 			self._handleSearchFormSubmission();
 		});
 
-		// Handl search result use btn:
-		$(document).on('click', '.' + this.options.searchResultBtnClass, function(e){
+		// Handle search result use btn:
+		$(document).on('click', '.' + self.options.searchResultBtnClass, function(e){
 			e.preventDefault();
 			self._handleSearchResultSelection($(this).attr('id').replace('search-result-', ''));
 		});
+	};
+
+	/**
+	 * Initializes all Handlebars functionality
+	 *
+	 * @return void
+	 */
+	Raffler.prototype._initHandlebars = function _initHandlebars() {
+		var self = this;
+
+		// Translate helper:
+		Handlebars.registerHelper('translate', function(s, params) {
+			if (typeof params === 'undefined') {
+				params = {};
+			}
+			return self._t(s, params);
+		});
+
+		// Compile templates:
+		var source   = $(self.options.templates.eventList).html();
+		self.options.templates.eventList = Handlebars.compile(source);
 	};
 
 	/**
@@ -240,14 +267,19 @@ if (typeof Array.prototype.unique === 'undefined') {
 			return;
 		}
 
-		var table = '<table class="table"><thead><tr><th>' + this._t('Event name') + '</th><th>&nbsp;</th></tr></thead>';
+		var evts = [];
 		for (var i = 0; i < events.length; i++) {
 			var eventID = events[i].uri.split('/').pop();
-			table += '<tr><td>' + events[i].name + '</td><td><button type="button" class="' + this.options.searchResultBtnClass + ' btn btn-default btn-xs" id="search-result-' + eventID + '"><span class="glyphicon glyphicon-thumbs-up"></span></button></td></tr>';
+			evts.push({
+				id: eventID,
+				name: events[i].name,
+				btnClass: self.options.searchResultBtnClass
+			});
 		}
-		table += '</table>';
 
-		$(this.options.selectors.frmSearch).parent().append(table);
+		$(this.options.selectors.frmSearch).parent().append(
+			self.options.templates.eventList({events: evts})
+		);
 	};
 
 	/**
@@ -454,4 +486,4 @@ if (typeof Array.prototype.unique === 'undefined') {
 
 	window.Raffler = Raffler;
 
-})(jQuery);
+})(jQuery, Handlebars);
