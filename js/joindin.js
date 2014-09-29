@@ -26,7 +26,14 @@ if (typeof Array.prototype.unique === 'undefined') {
      *
      * @return void
      */
-    function JoindIN(options) {
+    function JoindIN(meetup, options) {
+		this.meetup = null;
+		if (meetup instanceof Meetup) {
+			this.setMeetup(meetup);
+		} else {
+			options = meetup;
+		}
+
         if (typeof options === 'undefined') {
             options = {};
         }
@@ -36,6 +43,7 @@ if (typeof Array.prototype.unique === 'undefined') {
             api: {
                 version: 'v2.1',
                 nameField: 'user_display_name', // what's the name of the field which holds the commenter's name?
+				urlField: 'href', // what's the name of the field which holds the event's URL?
                 amountPerPage: 20, // amount of comments per page of comments
                 url: {
                     base: 'http://api.joind.in/{api.version}',
@@ -50,17 +58,32 @@ if (typeof Array.prototype.unique === 'undefined') {
         this._mergeObjectData(this.options, options);
     }
 
+	/**
+	 * Setter for the Meetup object
+	 *
+	 * @param meetup Object - The Meetup object
+	 *
+	 * @return JoindIN - Current instance for chaining
+	 */
+	JoindIN.prototype.setMeetup = function setMeetup(meetup) {
+		if (meetup instanceof Meetup) {
+			this.meetup = meetup;
+		}
+
+		return this;
+	};
+
     /**
      * Returns a list of all commenters of given event
+	 *
+	 * Cross checks with Meetup if available
      *
      * @param eventID int - The ID of the event
      *
-     * @return void
+     * @return Object - A promise
      */
     JoindIN.prototype.getAllEventCommenters = function getAllEventCommenters(eventID) {
         var self = this;
-
-        var commentsPromise = this._collectCommenters(eventID);
 
         // create deferred object:
         var dfrd = $.Deferred();
@@ -68,13 +91,64 @@ if (typeof Array.prototype.unique === 'undefined') {
         // create promise to return:
         var promise = dfrd.promise();
 
-        commentsPromise.done(function(commenters){
+        // async get the event comments & all the talk URL's:
+        $.when(
+            this._collectCommenters(eventID),
+            this.getEventDetails(eventID)
+        ).done(function(commenters, eventDetails){
             if (!self.options.weighted) {
                 commenters = commenters.unique();
             }
 
-            dfrd.resolve(commenters);
-        });
+			// cross check
+			if (self.isMeetupEvent(eventDetails)) {
+				var meetupPromise = self.meetup.getRsvpsFromEventUrl(eventDetails[self.options.api.urlField]);
+				meetupPromise.done(function(rsvps) {
+					// filter out all commenters not present in rsvps
+					var filtered = [];
+					for (var i = 0; i < commenters.length; i++) {
+						if (-1 !== rsvps.indexOf(commenters[i])) {
+							filtered.push(commenters[i]);
+						}
+					}
+
+					// resolve!
+					dfrd.resolve(filtered);
+				});
+			} else {
+				// resolve!
+				dfrd.resolve(commenters);
+			}
+		});
+
+        return promise;
+    };
+
+    /**
+	 * Returns if given event is also a Meetup event
+     *
+     * @param eventDetails Object - Event data
+     *
+     * @return boolean
+     */
+    JoindIN.prototype.isMeetupEvent = function isMeetupEvent(eventDetails) {
+		var self = this;
+
+        var varPattern = /meetup\.com/;
+        return (self.meetup instanceof Meetup && eventDetails[self.options.api.urlField].match(varPattern));
+	};
+
+    /**
+     * Returns the details of given eventID
+     *
+     * @param eventID int - The ID of the event
+     *
+     * @return Object - A promise
+     */
+    JoindIN.prototype.getEventDetails = function getEventDetails(eventID) {
+        var self = this;
+
+        var promise = this._collectEventDetails(eventID);
 
         return promise;
     };
@@ -84,7 +158,7 @@ if (typeof Array.prototype.unique === 'undefined') {
      *
      * @param query string - The search query
      *
-     * @return void
+     * @return Object - A promise
      */
     JoindIN.prototype.searchEventsByTitle = function searchEventsByTitle(query) {
         var self = this;
@@ -129,6 +203,34 @@ if (typeof Array.prototype.unique === 'undefined') {
         ).done(function(data){
             var events = data.events;
             dfrd.resolve(events);
+        });
+        return promise;
+    };
+
+    /**
+     * Collects the events matching given query
+     *
+     * @param query string - The query to search for
+     *
+     * @return Object - A promise
+     */
+    JoindIN.prototype._collectEventDetails = function _collectEventDetails(eventID) {
+        var urlEvents = this._getUrl(
+            'event',
+            this._mergeObjectData({eventID: eventID}, this.options)
+        );
+
+        // create deferred object:
+        var dfrd = $.Deferred();
+
+        // create promise to return:
+        var promise = dfrd.promise();
+
+        $.when(
+            this._doRequest(urlEvents)
+        ).done(function(data){
+            var events = data.events;
+            dfrd.resolve(events.pop());
         });
         return promise;
     };
