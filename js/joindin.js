@@ -26,7 +26,14 @@ if (typeof Array.prototype.unique === 'undefined') {
      *
      * @return void
      */
-    function JoindIN(options) {
+    function JoindIN(meetup, options) {
+        this.meetup = null;
+        if (meetup instanceof Meetup) {
+            this.setMeetup(meetup);
+        } else {
+            options = meetup;
+        }
+
         if (typeof options === 'undefined') {
             options = {};
         }
@@ -36,6 +43,7 @@ if (typeof Array.prototype.unique === 'undefined') {
             api: {
                 version: 'v2.1',
                 nameField: 'user_display_name', // what's the name of the field which holds the commenter's name?
+                urlField: 'href', // what's the name of the field which holds the event's URL?
                 amountPerPage: 20, // amount of comments per page of comments
                 url: {
                     base: 'http://api.joind.in/{api.version}',
@@ -51,16 +59,31 @@ if (typeof Array.prototype.unique === 'undefined') {
     }
 
     /**
+     * Setter for the Meetup object
+     *
+     * @param meetup Object - The Meetup object
+     *
+     * @return JoindIN - Current instance for chaining
+     */
+    JoindIN.prototype.setMeetup = function setMeetup(meetup) {
+        if (meetup instanceof Meetup) {
+            this.meetup = meetup;
+        }
+
+        return this;
+    };
+
+    /**
      * Returns a list of all commenters of given event
+     *
+     * Cross checks with Meetup if available
      *
      * @param eventID int - The ID of the event
      *
-     * @return void
+     * @return Object - A promise
      */
     JoindIN.prototype.getAllEventCommenters = function getAllEventCommenters(eventID) {
         var self = this;
-
-        var commentsPromise = this._collectCommenters(eventID);
 
         // create deferred object:
         var dfrd = $.Deferred();
@@ -68,13 +91,64 @@ if (typeof Array.prototype.unique === 'undefined') {
         // create promise to return:
         var promise = dfrd.promise();
 
-        commentsPromise.done(function(commenters){
-            if (!self.options.weighted) {
-                commenters = commenters.unique();
-            }
+        // async get the event comments & all the talk URL's:
+        $.when(
+                this._collectCommenters(eventID),
+                this.getEventDetails(eventID)
+              ).done(function(commenters, eventDetails){
+                  if (!self.options.weighted) {
+                      commenters = commenters.unique();
+                  }
 
-            dfrd.resolve(commenters);
-        });
+                  // cross check
+                  if (self.isMeetupEvent(eventDetails)) {
+                      var meetupPromise = self.meetup.getRsvpsFromEventUrl(eventDetails[self.options.api.urlField]);
+                      meetupPromise.done(function(rsvps) {
+                          // filter out all commenters not present in rsvps
+                          var filtered = [];
+                          for (var i = 0; i < commenters.length; i++) {
+                              if (-1 !== rsvps.indexOf(commenters[i])) {
+                                  filtered.push(commenters[i]);
+                              }
+                          }
+
+                          // resolve!
+                          dfrd.resolve(filtered);
+                      });
+                  } else {
+                      // resolve!
+                      dfrd.resolve(commenters);
+                  }
+              });
+
+        return promise;
+    };
+
+    /**
+     * Returns if given event is also a Meetup event
+     *
+     * @param eventDetails Object - Event data
+     *
+     * @return boolean
+     */
+    JoindIN.prototype.isMeetupEvent = function isMeetupEvent(eventDetails) {
+        var self = this;
+
+        var varPattern = /meetup\.com/;
+        return (self.meetup instanceof Meetup && eventDetails[self.options.api.urlField].match(varPattern));
+    };
+
+    /**
+     * Returns the details of given eventID
+     *
+     * @param eventID int - The ID of the event
+     *
+     * @return Object - A promise
+     */
+    JoindIN.prototype.getEventDetails = function getEventDetails(eventID) {
+        var self = this;
+
+        var promise = this._collectEventDetails(eventID);
 
         return promise;
     };
@@ -84,7 +158,7 @@ if (typeof Array.prototype.unique === 'undefined') {
      *
      * @param query string - The search query
      *
-     * @return void
+     * @return Object - A promise
      */
     JoindIN.prototype.searchEventsByTitle = function searchEventsByTitle(query) {
         var self = this;
@@ -113,9 +187,9 @@ if (typeof Array.prototype.unique === 'undefined') {
      */
     JoindIN.prototype._collectEvents = function _collectEvents(query) {
         var urlEvents = this._getUrl(
-            'events',
-            this.options
-        );
+                'events',
+                this.options
+                );
         urlEvents += '&filter=hot&title=' + encodeURIComponent(query);
 
         // create deferred object:
@@ -125,11 +199,39 @@ if (typeof Array.prototype.unique === 'undefined') {
         var promise = dfrd.promise();
 
         $.when(
-            this._doRequest(urlEvents)
-        ).done(function(data){
-            var events = data.events;
-            dfrd.resolve(events);
-        });
+                this._doRequest(urlEvents)
+              ).done(function(data){
+                  var events = data.events;
+                  dfrd.resolve(events);
+              });
+        return promise;
+    };
+
+    /**
+     * Collects the events matching given query
+     *
+     * @param query string - The query to search for
+     *
+     * @return Object - A promise
+     */
+    JoindIN.prototype._collectEventDetails = function _collectEventDetails(eventID) {
+        var urlEvents = this._getUrl(
+                'event',
+                this._mergeObjectData({eventID: eventID}, this.options)
+                );
+
+        // create deferred object:
+        var dfrd = $.Deferred();
+
+        // create promise to return:
+        var promise = dfrd.promise();
+
+        $.when(
+                this._doRequest(urlEvents)
+              ).done(function(data){
+                  var events = data.events;
+                  dfrd.resolve(events.pop());
+              });
         return promise;
     };
 
@@ -143,13 +245,13 @@ if (typeof Array.prototype.unique === 'undefined') {
     JoindIN.prototype._collectCommenters = function _collectCommenters(eventID) {
         // collect event commentors
         var urlEventComments = this._getUrl(
-            'eventComments',
-            this._mergeObjectData({eventID: eventID}, this.options)
-        );
+                'eventComments',
+                this._mergeObjectData({eventID: eventID}, this.options)
+                );
         var urlTalks = this._getUrl(
-            'talks',
-            this._mergeObjectData({eventID: eventID}, this.options)
-        );
+                'talks',
+                this._mergeObjectData({eventID: eventID}, this.options)
+                );
 
         var self = this;
 
@@ -164,41 +266,41 @@ if (typeof Array.prototype.unique === 'undefined') {
 
         // async get the event comments & all the talk URL's:
         $.when(
-            this._doRequest(urlEventComments),
-            this._doRequest(urlTalks)
-        ).done(function(resultEventComments, resultTalks){
-            // extract comments from the Event:
-            if (resultEventComments[1] === 'success') {
-                commenters = commenters.concat(self._extractComments(resultEventComments[0]));
-            }
+                this._doRequest(urlEventComments),
+                this._doRequest(urlTalks)
+              ).done(function(resultEventComments, resultTalks){
+                  // extract comments from the Event:
+                  if (resultEventComments[1] === 'success') {
+                      commenters = commenters.concat(self._extractComments(resultEventComments[0]));
+                  }
 
-            // fetch all talks with comments:
-            if (resultTalks[1] === 'success') {
-                var talksWithComments = self._extractTalksWithComments(resultTalks[0]);
+                  // fetch all talks with comments:
+                  if (resultTalks[1] === 'success') {
+                      var talksWithComments = self._extractTalksWithComments(resultTalks[0]);
 
-                // keep track of al list of deffered objects. Each object is a deferred AJAX call to the API
-                var deferredCalls = [];
-                for (var i = 0; i < talksWithComments.length; i++) {
-                    deferredCalls.push(self._doRequest(talksWithComments[i]));
-                }
+                      // keep track of al list of deffered objects. Each object is a deferred AJAX call to the API
+                      var deferredCalls = [];
+                      for (var i = 0; i < talksWithComments.length; i++) {
+                          deferredCalls.push(self._doRequest(talksWithComments[i]));
+                      }
 
-                // Group the deferred calls:
-                var grouped = $.when.apply(self, deferredCalls);
+                      // Group the deferred calls:
+                      var grouped = $.when.apply(self, deferredCalls);
 
-                // When all deferred objects are resolved, extract comments and trigger
-                // the "done" method on the returned promise
-                grouped.done(function() {
-                    for (var i = 0; i < arguments.length; i++) {
-                        commenters = commenters.concat(self._extractComments(arguments[i][0]));
-                    }
+                      // When all deferred objects are resolved, extract comments and trigger
+                      // the "done" method on the returned promise
+                      grouped.done(function() {
+                          for (var i = 0; i < arguments.length; i++) {
+                              commenters = commenters.concat(self._extractComments(arguments[i][0]));
+                          }
 
-                    commenters = commenters.filter(function(el){
-                        return (el !== null);
-                    });
-                    dfrd.resolve(commenters);
-                });
-            }
-        });
+                          commenters = commenters.filter(function(el){
+                              return (el !== null);
+                          });
+                          dfrd.resolve(commenters);
+                      });
+                  }
+              });
 
         return promise;
     };
