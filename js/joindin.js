@@ -135,7 +135,9 @@ if (typeof Array.prototype.unique === 'undefined') {
         var self = this;
 
         var varPattern = /meetup\.com/;
-        return (self.meetup instanceof Meetup && eventDetails[self.options.api.urlField].match(varPattern));
+        return (self.meetup instanceof Meetup
+                && typeof eventDetails[self.options.api.urlField] !== 'undefined'
+                && eventDetails[self.options.api.urlField].match(varPattern));
     };
 
     /**
