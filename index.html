@@ -120,7 +120,7 @@
 		var defaultContent = '';
 
 		var loadPage = function(page, push) {
-			if(typeof()==='undefined') push = false;
+			if(typeof(push)==='undefined') push = false;
 			if (push == true) history.pushState(page ,'','#' + page);
 
 			$('#content').empty();
