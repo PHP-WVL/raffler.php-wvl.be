@@ -283,6 +283,16 @@ body {
   max-width: 62.5rem;
   text-align: left; }
 
+#ruleslist {
+  width: 95%;
+  max-width: 62.5rem;
+  margin: auto;
+  text-align: left; }
+  #ruleslist li {
+    margin-top: 1rem; }
+
 @media screen and (min-width: 450px) {
   body#homepage {
     color: black; } }
+
+/*# sourceMappingURL=screen.css.map */

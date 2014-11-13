@@ -4,9 +4,6 @@ body {
 	font-family: verdana, arial, sans serif;
 }
 
-
-
-
 #content {
 	z-index: 150;
 	width: 100%;
@@ -31,4 +28,14 @@ body {
 	width: 95%;
 	max-width: 62.5rem;
 	text-align: left;
+}
+
+#ruleslist {
+  width: 95%;
+  max-width: 62.5rem;
+  margin: auto;
+  text-align: left;
+  li {
+    margin-top: 1rem;
+  }
 }
