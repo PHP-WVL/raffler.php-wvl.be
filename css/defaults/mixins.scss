@@ -1,0 +1,22 @@
+// this file contains all globally used mixins
+
+
+@mixin transition($transition-property, $transition-time, $method:"") {
+	-webkit-transition: $transition-property $transition-time unquote($method);
+	-moz-transition: $transition-property $transition-time unquote($method);
+	-ms-transition: $transition-property $transition-time unquote($method);
+	-o-transition: $transition-property $transition-time unquote($method);
+	transition: $transition-property $transition-time unquote($method);
+}
+
+@mixin borderbox() {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+}
+
+@mixin breakpoint($width) {
+	@media screen and (min-width: "#{$width}px") {
+		@content;
+	}
+}

@@ -1,0 +1,34 @@
+body {
+	background: $content-background-color;
+	font-size: 16px;
+	font-family: verdana, arial, sans serif;
+}
+
+
+
+
+#content {
+	z-index: 150;
+	width: 100%;
+	background: $content-background-color;
+	color: $text-color;
+	margin-top: 23.875rem;
+	border-top: 0.6875rem solid transparentize($content-background-color, .5);
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
+	text-align: center;
+	padding: 2em;
+	position: relative;
+}
+
+.list-group {
+	margin: {
+		top: 2rem;
+		bottom: 2rem;
+		left: auto;
+		right: auto;
+	};
+	width: 95%;
+	max-width: 62.5rem;
+	text-align: left;
+}

@@ -1,0 +1,7 @@
+textarea {
+	resize: none;
+}
+
+label.required:after {
+	content: '*';
+}
