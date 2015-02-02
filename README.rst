@@ -31,7 +31,7 @@ To install Grunt, run::
 
     npm install grunt
 
-Then prepare the sources for deploy to Githug Pages::
+Then prepare the sources for deploy to Github Pages::
 
     git checkout gh-pages
     grunt deploy

@@ -1,8 +1,20 @@
 module.exports = function(grunt) {
+	// load dependencies
+	grunt.loadNpmTasks('grunt-git');
+
+	// Project configuration.
+	grunt.initConfig({
+		gitcheckout: {
+			ghpages: {
+				options: {
+					branch: "gh-pages"
+				}
+			}
+		}
+	});
+
 
 	// deploy
-	grunt.registerTask('deploy', 'Getting things ready to deploy', function() {
-		grunt.log.write('Starting deploy...');
-	});
+	grunt.registerTask('deploy', ['gitcheckout:ghpages']);
 
 };
