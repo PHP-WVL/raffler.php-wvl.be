@@ -16,13 +16,13 @@ Dependencies (Bower)
 
 All external dependencies of raffler.php-wvl.be are managed by `Bower`_. To install Bower on your local machine, install it with NPM:
 
-.. code-block:: shell
+::
     npm install -g bower
 
 Next, install the project's dependencies in the ``js/vendors/`` folder by executing the following command:
 
 
-.. code-block:: shell
+::
     bower install
 
 
