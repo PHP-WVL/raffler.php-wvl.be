@@ -4,24 +4,31 @@ raffler.php-wvl.be
 setup
 -----
 
-Prerequisites (.. _NodeJS: http://nodejs.org/, .. _NPM: https://www.npmjs.com/)
+Prerequisites (`NodeJS`_, `NPM`_)
 .....
 
-The raffler.php-wvl.be site is managed by modern JS tools like .. _Bower: http://bower.io for dependencies, .. _RequireJS: http://www.requirejs.org/ for requiring files in the source code and .. _Grunt: http://gruntjs.com for preparing the site for deploying on github pages.
+The raffler.php-wvl.be site is managed by modern JS tools like `Bower`_ for dependencies, `RequireJS`_ for requiring files in the source code and `Grunt`_ for preparing the site for deploying on github pages.
 
-In order for these tools to work, install .. _NodeJS: http://nodejs.org/ and .. _NPM: https://www.npmjs.com/ locally on your dev machine before you continue with the rest.
+In order for these tools to work, install `NodeJS`_ and `NPM`_ locally on your dev machine before you continue with the rest.
 
 Dependencies (Bower)
 .....
 
-All external dependencies of raffler.php-wvl.be are managed by .. _Bower: http://bower.io. To install Bower on your local machine, install it with NPM:
+All external dependencies of raffler.php-wvl.be are managed by `Bower`_. To install Bower on your local machine, install it with NPM:
 
-.. code:: bash
+.. code-block:: shell
     npm install -g bower
 
-Next, install the project's dependencies in the `js/vendors/` folder by executing the following command:
+Next, install the project's dependencies in the ``js/vendors/`` folder by executing the following command:
 
 
-.. code:: bash
+.. code-block:: shell
     bower install
 
+
+
+.. _NodeJS: http://nodejs.org/
+.. _NPM: https://www.npmjs.com/
+.. _Bower: http://bower.io/
+.. _RequireJS: http://www.requirejs.org/
+.. _Grunt: http://gruntjs.com
