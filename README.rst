@@ -16,13 +16,13 @@ Dependencies (Bower)
 
 All external dependencies of raffler.php-wvl.be are managed by `Bower`_. To install Bower on your local machine, install it with NPM::
 
-.. code-block:: bash
+.. code:: bash
 
     $ npm install -g bower
 
 Next, install the project's dependencies in the ``js/vendors/`` folder by executing the following command::
 
-.. code-block:: bash
+.. code:: bash
 
     $ bower install
 
@@ -33,13 +33,13 @@ When deploying the raffler to the Github Pages, we need the dependencies without
 
 To install Grunt, run::
 
-.. code-block:: bash
+.. code:: bash
 
     $ npm install grunt
 
 Then prepare the sources for deploy to Github Pages::
 
-.. code-block:: bash
+.. code:: bash
 
     $ git checkout gh-pages
     $ grunt deploy
