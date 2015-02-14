@@ -249,10 +249,25 @@ header {
     position: relative;
     width: 10rem;
     height: 10rem;
-    margin: auto;
+    left: 50%;
+    margin-left: -5rem;
     display: block;
     border-radius: 50%;
     box-sizing: content-box; }
+    #logo h1.konami {
+      -webkit-transition: all 1.2s ease-in-out;
+      -moz-transition: all 1.2s ease-in-out;
+      -o-transition: all 1.2s ease-in-out;
+      transition: all 1.2s ease-in-out;
+      -webkit-transform: rotate(720deg);
+      -moz-transform: rotate(720deg);
+      -o-transform: rotate(720deg);
+      -ms-transform: rotate(720deg);
+      transform: rotate(720deg);
+      left: 100%;
+      margin-left: 6rem; }
+      #logo h1.konami:after {
+        background: none; }
     #logo h1 > a {
       width: 10rem;
       height: 10rem;
@@ -304,7 +319,8 @@ body {
   background-size: 2px 2px, cover;
   font-size: 16px;
   font-family: verdana, arial, sans serif;
-  min-height: 100%; }
+  min-height: 100%;
+  overflow-x: hidden; }
 
 #content {
   z-index: 150;
