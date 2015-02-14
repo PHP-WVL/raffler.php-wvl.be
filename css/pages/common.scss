@@ -14,21 +14,31 @@ body {
 
 #content {
 	z-index: 150;
-	width: 100%;
+	width: 90%;
 	text-align: center;
 	padding: 2em;
 	color: white;
 	font-family: Roboto, sans-serif;
-	max-width: 80%;
+	max-width: 60rem;
 	margin: auto;
-	margin-top: 6rem;
+	margin-top: 2rem;
+	&.page {
+		background: white;
+		color: black;
+		a {
+			color: #767BB3;
+		}
+	}
 }
 
 #rafflerContent {
-	max-width: 775px;
+	max-width: 48.43rem;
 	width: 100%;
 	background: rgba(0,0,0,.7);
 	margin: auto;
+	@include breakpoint(48rem) {
+		margin-top: 4rem;
+	}
 	padding: 2rem;
 	p {
 		line-height: 1.5
@@ -41,7 +51,6 @@ body {
 		th {
 			background: #767BB3;
 			text-align: center;
-
 		}
 		td {
 			background: #DADADA;

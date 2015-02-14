@@ -27,8 +27,8 @@ var dynamicPages = (function() {
 
         $('#content').empty();
 
-        if (page == 'home') $('#content').append(defaultContent);
-        else $('#content').load(page + ".html");
+        if (page == 'home')  $('#content').append(defaultContent).removeClass('page');
+        else $('#content').load(page + ".html").addClass('page');
     };
 
     return {

@@ -291,7 +291,8 @@ footer {
   text-align: center;
   line-height: 2;
   font-size: .625rem;
-  color: white; }
+  color: white;
+  padding: 1rem; }
 
 html {
   min-height: 100%; }
@@ -307,21 +308,29 @@ body {
 
 #content {
   z-index: 150;
-  width: 100%;
+  width: 90%;
   text-align: center;
   padding: 2em;
   color: white;
   font-family: Roboto, sans-serif;
-  max-width: 80%;
+  max-width: 60rem;
   margin: auto;
-  margin-top: 6rem; }
+  margin-top: 2rem; }
+  #content.page {
+    background: white;
+    color: black; }
+    #content.page a {
+      color: #767BB3; }
 
 #rafflerContent {
-  max-width: 775px;
+  max-width: 48.43rem;
   width: 100%;
   background: rgba(0, 0, 0, 0.7);
   margin: auto;
   padding: 2rem; }
+  @media screen and (min-width: 48rem) {
+    #rafflerContent {
+      margin-top: 4rem; } }
   #rafflerContent p {
     line-height: 1.5; }
   #rafflerContent a {
