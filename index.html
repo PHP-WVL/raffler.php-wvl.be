@@ -7,7 +7,7 @@
 	<meta name="description" content="The PHP-WVL Raffler is a tool to randomly select 1 person from the list of commenters of an event on Joind.IN" />
 
 	<link rel="stylesheet" href="css/screen.css"/>
-	<link href='http://fonts.googleapis.com/css?family=Hammersmith+One' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
 
 	<script src="js/modernizr.min.js"></script>
 
@@ -26,8 +26,7 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<th>{{translate 'Event name'}}</th>
-					<th>&nbsp;</th>
+					<th colspan="2" >{{translate 'Event name'}}</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -35,7 +34,7 @@
 				<tr>
 					<td>{{this.name}}</td>
 					<td>
-						<button type="button" class="{{this.btnClass}} btn btn-default btn-xs" id="search-result-{{this.id}}">
+						<button type="button" class="{{this.btnClass}} btn btn-primary btn-xs" id="search-result-{{this.id}}">
 							<span class="glyphicon glyphicon-thumbs-up"></span>
 						</button>
 					</td>
@@ -51,10 +50,11 @@
 		<div class="col-sm-11">{{text}}</div>
 	</script>
 	<script id="raffler-loaderRight" type="text/x-handlebars-template">
-		<div class="col-sm-11">{{text}}</div>
 		<div class="col-sm-1">
 			<img src="{{path}}" title="{{translate 'Loading...'}}" alt="loader image" />
 		</div>
+		<div class="col-sm-11">{{text}}</div>
+
 	</script>
     <script type="text/javascript">
         $(function(){
@@ -70,7 +70,6 @@
 
        ga('create', 'UA-50375074-2', 'auto');
        ga('send', 'pageview');
-
     </script>
 	<header>
 		<div id="navbar">
@@ -78,39 +77,44 @@
 		</div>
 		<div id="logo">
 			<h1>
-				PHP-WVL
+				<a href="#">
+					<img src="img/logo.png" alt="PHP-WVL" />
+				</a>
 			</h1>
 		</div>
 	</header>
 	<div id="content">
-		<h2>PHP-WVL Joind.in Raffler</h2>
-		<p>
-			Randomly selects 1 person who took the effort of providing feedback to the given Joind.in event.
-		</p>
-		<div id="msgPane" style="padding:0 10px;margin-bottom:15px;"></div>
-		<form id="frmRaffle" class="form-inline" role="form">
-			<div class="form-group">
-				<label for="inputEventID" class="control-label">Event ID</label>
-				<input type="text" class="form-control" id="inputEventID" placeholder="e.g. 2177">
+		<div id="rafflerContent">
+			<h2>PHP-WVL Joind.in Raffler</h2>
+			<p>
+				Randomly selects 1 person who took the effort of providing feedback to the given Joind.in event.
+			</p>
+			<div id="msgPane" style="padding:10px;margin-bottom:15px;">
 			</div>
-			<div class="form-group">
-				<button type="submit" class="btn btn-primary" id="btnRaffle">Raffle!</button>
-				<button type="button" class="btn btn-small btn-default" id="btnSearch">
-					<span class="glyphicon glyphicon-search"></span>
-				</button>
-			</div>
-		</form>
-		<form id="frmSearch" class="form-inline" role="form">
-			<div class="form-group">
-				<label for="inputQuery" class="control-label">Event name</label>
-				<input type="text" class="form-control" id="inputQuery" placeholder="e.g. WVL">
-			</div>
-			<div class="form-group">
-				<button type="submit" class="btn btn-primary" id="btnSearchSubmit">Search</button>
-				<button type="button" class="btn btn-link" id="btnSearchCancel">Cancel</button>
-			</div>
-		</form>
-		<p><a href="rules" class="load">rules</a></p>
+			<form id="frmRaffle" class="form-inline" role="form">
+				<div class="form-group">
+					<label for="inputEventID" class="control-label">Event ID</label>
+					<input type="text" class="form-control" id="inputEventID" placeholder="e.g. 2177">
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary" id="btnRaffle">Raffle!</button>
+					<button type="button" class="btn btn-small btn-default" id="btnSearch">
+						<span class="glyphicon glyphicon-search"></span>
+					</button>
+				</div>
+			</form>
+			<form id="frmSearch" class="form-inline" role="form">
+				<div class="form-group">
+					<label for="inputQuery" class="control-label">Event name</label>
+					<input type="text" class="form-control" id="inputQuery" placeholder="e.g. WVL">
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary" id="btnSearchSubmit">Search</button>
+					<button type="button" class="btn btn-link" id="btnSearchCancel">Cancel</button>
+				</div>
+			</form>
+			<p><a href="rules" class="load">rules</a></p>
+		</div>
 	</div>
 	<footer>
 		&copy; PHP-WVL
