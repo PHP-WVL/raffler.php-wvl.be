@@ -153,23 +153,23 @@ input[type=button] {
   zoom: 1; }
 
 h1 {
-  font-family: 'Hammersmith One', arial, sans-serif; }
+  font-family: 'Roboto', arial, sans-serif; }
 
 h2 {
-  font-family: 'Hammersmith One', arial, sans-serif;
-  font-size: 3rem; }
+  font-family: 'Roboto', arial, sans-serif;
+  font-size: 2.25rem; }
 
 h3 {
-  font-family: 'Hammersmith One', arial, sans-serif; }
+  font-family: 'Roboto', arial, sans-serif; }
 
 h4 {
-  font-family: 'Hammersmith One', arial, sans-serif; }
+  font-family: 'Roboto', arial, sans-serif; }
 
 h5 {
-  font-family: 'Hammersmith One', arial, sans-serif; }
+  font-family: 'Roboto', arial, sans-serif; }
 
 h6 {
-  font-family: 'Hammersmith One', arial, sans-serif; }
+  font-family: 'Roboto', arial, sans-serif; }
 
 p {
   padding-top: 1em;
@@ -212,67 +212,152 @@ textarea {
 label.required:after {
   content: '*'; }
 
+#frmRaffle, #frmSearch {
+  margin-top: .7rem; }
+  #frmRaffle input, #frmRaffle button, #frmSearch input, #frmSearch button {
+    border-radius: 0;
+    border: none; }
+
+button {
+  border-radius: 0 !important;
+  box-shadow: none !important; }
+  button.btn-primary.btn-primary {
+    background: #767BB3;
+    border: 1px solid #767BB3; }
+  button.btn-default.btn-default {
+    background: #E0E0E0;
+    border: 1px solid #E0E0E0; }
+  button.btn-link.btn-link {
+    color: white;
+    text-decoration: underline; }
+
 header {
-  position: fixed;
   top: 0;
-  width: 100%;
-  background: url(../img/bg.png) #767bb3;
-  background-attachment: fixed; }
+  width: 100%; }
 
 #navbar {
-  background: #2c2c2c;
-  height: 3rem;
-  box-sizing: content-box;
-  border-bottom: 0.6875rem solid rgba(44, 44, 44, 0.5);
-  -webkit-background-clip: padding-box;
-  background-clip: padding-box; }
+  height: 6rem;
+  background: rgba(0, 0, 0, 0.7);
+  width: 100%;
+  top: 0; }
 
 #logo {
   text-align: center;
-  margin-top: 2.4375rem;
-  margin-bottom: 3rem; }
+  margin-top: -5rem;
+  box-sizing: border-box; }
   #logo h1 {
-    width: 15.625rem;
-    height: 15.625rem;
-    margin: auto;
-    overflow: hidden;
+    position: relative;
+    width: 10rem;
+    height: 10rem;
+    left: 50%;
+    margin-left: -5rem;
     display: block;
-    text-indent: -9999px;
-    background: url(../img/logo.png) no-repeat center;
-    background-size: 100%;
-    -webkit-transition: all 0.3s ease-in-out;
-    -moz-transition: all 0.3s ease-in-out;
-    -o-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out; }
-    #logo h1:hover {
-      -webkit-transform: rotate(10deg);
-      -moz-transform: rotate(10deg);
-      -o-transform: rotate(10deg);
-      -ms-transform: rotate(10deg);
-      transform: rotate(10deg); }
+    border-radius: 50%;
+    box-sizing: content-box; }
+    #logo h1.konami {
+      -webkit-transition: all 1.2s ease-in-out;
+      -moz-transition: all 1.2s ease-in-out;
+      -o-transition: all 1.2s ease-in-out;
+      transition: all 1.2s ease-in-out;
+      -webkit-transform: rotate(720deg);
+      -moz-transform: rotate(720deg);
+      -o-transform: rotate(720deg);
+      -ms-transform: rotate(720deg);
+      transform: rotate(720deg);
+      left: 100%;
+      margin-left: 6rem; }
+      #logo h1.konami:after {
+        background: none; }
+    #logo h1 > a {
+      width: 10rem;
+      height: 10rem;
+      background-size: 100%;
+      display: block;
+      overflow: hidden;
+      position: relative;
+      text-align: left; }
+      #logo h1 > a img {
+        position: absolute;
+        z-index: 9999;
+        width: 100%;
+        -webkit-transition: all 0.3s ease-in-out;
+        -moz-transition: all 0.3s ease-in-out;
+        -o-transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out; }
+        #logo h1 > a img:hover {
+          -webkit-transform: rotate(10deg);
+          -moz-transform: rotate(10deg);
+          -o-transform: rotate(10deg);
+          -ms-transform: rotate(10deg);
+          transform: rotate(10deg); }
+    #logo h1:after {
+      content: "";
+      height: 5.5rem;
+      background: rgba(0, 0, 0, 0.7);
+      position: absolute;
+      width: 11rem;
+      border-bottom-left-radius: 5.5rem;
+      border-bottom-right-radius: 5.5rem;
+      top: 5rem;
+      left: -0.5rem;
+      z-index: 0; }
 
 footer {
   text-align: center;
   line-height: 2;
-  font-size: .625rem; }
+  font-size: .625rem;
+  color: white;
+  padding: 1rem; }
+
+html {
+  min-height: 100%; }
 
 body {
-  background: #dadada;
+  background-image: url("../img/pattern.png"), url("../img/bg_image.jpg");
+  background-position: left top, center top;
+  background-repeat: repeat, no-repeat;
+  background-size: 2px 2px, cover;
   font-size: 16px;
-  font-family: verdana, arial, sans serif; }
+  font-family: verdana, arial, sans serif;
+  min-height: 100%;
+  overflow-x: hidden; }
 
 #content {
   z-index: 150;
-  width: 100%;
-  background: #dadada;
-  color: #2c2c2c;
-  margin-top: 23.875rem;
-  border-top: 0.6875rem solid rgba(218, 218, 218, 0.5);
-  -webkit-background-clip: padding-box;
-  background-clip: padding-box;
+  width: 90%;
   text-align: center;
   padding: 2em;
-  position: relative; }
+  color: white;
+  font-family: Roboto, sans-serif;
+  max-width: 60rem;
+  margin: auto;
+  margin-top: 2rem; }
+  #content.page {
+    background: white;
+    color: black; }
+    #content.page a {
+      color: #767BB3; }
+
+#rafflerContent {
+  max-width: 48.43rem;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  margin: auto;
+  padding: 2rem; }
+  @media screen and (min-width: 48rem) {
+    #rafflerContent {
+      margin-top: 4rem; } }
+  #rafflerContent p {
+    line-height: 1.5; }
+  #rafflerContent a {
+    color: white;
+    text-decoration: underline; }
+  #rafflerContent table th {
+    background: #767BB3;
+    text-align: center; }
+  #rafflerContent table td {
+    background: #DADADA;
+    color: black; }
 
 .list-group {
   margin-top: 2rem;
@@ -291,8 +376,7 @@ body {
   #ruleslist li {
     margin-top: 1rem; }
 
-@media screen and (min-width: 450px) {
-  body#homepage {
-    color: black; } }
-
-/*# sourceMappingURL=screen.css.map */
+#msgPane:not(.text-success):not(.text-danger) {
+  overflow: auto;
+  background: #DADADA;
+  color: black; }

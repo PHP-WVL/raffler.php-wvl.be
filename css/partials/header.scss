@@ -1,47 +1,85 @@
 header {
-	position: fixed;
-	top: 0;
-	width: 100%;
-	background: url(../img/bg.png) $php-purple;
-	background-attachment: fixed;
+    top: 0;
+    width: 100%;
 }
 
 #navbar {
-	background: $header-color;
-	height: 3rem;
-	//padding-bottom: 10px;
-	box-sizing: content-box;
-	border-bottom: 0.6875rem solid transparentize($header-color, .5);
-	-webkit-background-clip: padding-box;
-	background-clip: padding-box;
+    height: 6rem;
+    background: rgba(0, 0, 0, .7);
+    width: 100%;
+    top: 0;
 }
 
 #logo {
-	text-align: center;
-	margin: {
-		top: 2.4375rem;
-		bottom: 3rem;
-	};
-	h1 {
-		width: 15.625rem;
-		height: 15.625rem;
-		//background: green;
-		margin: auto;
-		overflow: hidden;
-		display: block;
-		text-indent: -9999px;
-		background: url(../img/logo.png) no-repeat center;
-		background-size: 100%;
-		-webkit-transition: all 0.3s ease-in-out;
-		-moz-transition: all 0.3s ease-in-out;
-		-o-transition: all 0.3s ease-in-out;
-		transition: all 0.3s ease-in-out;
-		&:hover {
-			-webkit-transform: rotate(10deg);
-			-moz-transform: rotate(10deg);
-			-o-transform: rotate(10deg);
-			-ms-transform: rotate(10deg);
-			transform: rotate(10deg);
-		}
-	}
+    text-align: center;
+    margin: {
+        top: -5rem;
+    }
+    box-sizing: border-box;
+    h1 {
+        position: relative;
+        width: 10rem;
+        height: 10rem;
+        left: 50%;
+        margin-left: -5rem;
+        display: block;
+        border-radius: 50%;
+        &.konami {
+            -webkit-transition: all 1.2s ease-in-out;
+            -moz-transition: all 1.2s ease-in-out;
+            -o-transition: all 1.2s ease-in-out;
+            transition: all 1.2s ease-in-out;
+            -webkit-transform: rotate(720deg);
+            -moz-transform: rotate(720deg);
+            -o-transform: rotate(720deg);
+            -ms-transform: rotate(720deg);
+            transform: rotate(720deg);
+            left: 100%;
+            margin-left: 6rem;
+            &:after {
+                background: none;
+            }
+        }
+        > a {
+            width: 10rem;
+            height: 10rem;
+            background-size: 100%;
+            display: block;
+
+            overflow: hidden;
+            position: relative;
+            text-align: left;
+            img {
+                position: absolute;
+                z-index: 9999;
+                width: 100%;
+                -webkit-transition: all 0.3s ease-in-out;
+                -moz-transition: all 0.3s ease-in-out;
+                -o-transition: all 0.3s ease-in-out;
+                transition: all 0.3s ease-in-out;
+                &:hover {
+                    -webkit-transform: rotate(10deg);
+                    -moz-transform: rotate(10deg);
+                    -o-transform: rotate(10deg);
+                    -ms-transform: rotate(10deg);
+                    transform: rotate(10deg);
+                }
+            }
+
+        }
+        &:after {
+            content: "";
+            height: 5.5rem;
+            background: rgba(0, 0, 0, .7);
+            position: absolute;
+            width: 11rem;
+            border-bottom-left-radius: 5.5rem;
+            border-bottom-right-radius: 5.5rem;
+            top: 5rem;
+            left: -0.5rem;
+            z-index: 0;
+        }
+        box-sizing: content-box;
+
+    }
 }
