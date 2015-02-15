@@ -102,25 +102,25 @@ if (typeof Array.prototype.unique === 'undefined') {
 		input.focus();
 
 		// Handle form submissions:
-		$(this.options.selectors.btnEventIDSubmit).on('click', function(e){
+		$(document).on('click', this.options.selectors.btnEventIDSubmit, function(e){
 			e.preventDefault();
 			self._handleFormSubmission();
 		});
 
 		// Handle search init button:
-		$(this.options.selectors.btnSearchToggle).on('click', function(e){
+		$(document).on('click', this.options.selectors.btnSearchToggle, function(e){
 			e.preventDefault();
 			self._toggleSearchForm();
 		});
 
 		// Handle search cancel button:
-		$(this.options.selectors.btnSearchCancel).on('click', function(e){
+		$(document).on('click', this.options.selectors.btnSearchCancel, function(e){
 			e.preventDefault();
 			self._toggleSearchForm();
 		});
 
 		// Handle search form submissions:
-		$(this.options.selectors.btnSearchSubmit).on('click', function(e){
+		$(document).on('click', this.options.selectors.btnSearchSubmit, function(e){
 			e.preventDefault();
 			self._handleSearchFormSubmission();
 		});
