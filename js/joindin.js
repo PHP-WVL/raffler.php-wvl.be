@@ -1,5 +1,5 @@
 if (typeof jQuery === 'undefined') {
-    throw new Error('JoindIN requires jQuery to function propertly');
+    throw new Error('JoindIN requires jQuery to function properly');
 }
 
 if (typeof Array.prototype.unique === 'undefined') {

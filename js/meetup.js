@@ -1,5 +1,5 @@
 if (typeof jQuery === 'undefined') {
-	throw new Error('Meetup requires jQuery to function propertly');
+	throw new Error('Meetup requires jQuery to function properly');
 }
 
 if (typeof Array.prototype.unique === 'undefined') {

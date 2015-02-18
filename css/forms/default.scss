@@ -5,3 +5,29 @@ textarea {
 label.required:after {
 	content: '*';
 }
+
+
+#frmRaffle, #frmSearch {
+	margin-top: .7rem;
+	input, button {
+		border-radius: 0;
+		border: none;
+	}
+}
+
+button {
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	&.btn-primary.btn-primary {
+		background: #767BB3;
+		border: 1px solid #767BB3;
+	}
+	&.btn-default.btn-default {
+		background: #E0E0E0;
+		border: 1px solid #E0E0E0;
+	}
+	&.btn-link.btn-link {
+		color: white;
+		text-decoration: underline;
+	}
+}
