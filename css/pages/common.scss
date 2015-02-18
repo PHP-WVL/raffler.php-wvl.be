@@ -1,21 +1,63 @@
+html {
+	min-height:	100%;
+}
+
 body {
-	background: $content-background-color;
+	background-image: url('../img/pattern.png'), url('../img/bg_image.jpg');
+	background-position: left top, center top;
+	background-repeat: repeat, no-repeat;
+	background-size: 2px 2px, cover;
 	font-size: 16px;
 	font-family: verdana, arial, sans serif;
+	min-height: 100%;
+	overflow-x: hidden;
 }
 
 #content {
 	z-index: 150;
-	width: 100%;
-	background: $content-background-color;
-	color: $text-color;
-	margin-top: 23.875rem;
-	border-top: 0.6875rem solid transparentize($content-background-color, .5);
-	-webkit-background-clip: padding-box;
-	background-clip: padding-box;
+	width: 90%;
 	text-align: center;
 	padding: 2em;
-	position: relative;
+	color: white;
+	font-family: Roboto, sans-serif;
+	max-width: 60rem;
+	margin: auto;
+	margin-top: 2rem;
+	&.page {
+		background: white;
+		color: black;
+		a {
+			color: #767BB3;
+		}
+	}
+}
+
+#rafflerContent {
+	max-width: 48.43rem;
+	width: 100%;
+	background: rgba(0,0,0,.7);
+	margin: auto;
+	@include breakpoint(48rem) {
+		margin-top: 4rem;
+	}
+	padding: 2rem;
+	p {
+		line-height: 1.5
+	}
+	a {
+		color: white;
+		text-decoration: underline;
+	}
+	table {
+		th {
+			background: #767BB3;
+			text-align: center;
+		}
+		td {
+			background: #DADADA;
+			color: black;
+		}
+	}
 }
 
 .list-group {
@@ -38,4 +80,10 @@ body {
   li {
     margin-top: 1rem;
   }
+}
+
+#msgPane:not(.text-success):not(.text-danger) {
+	overflow: auto;
+	background: #DADADA;
+	color: black;
 }

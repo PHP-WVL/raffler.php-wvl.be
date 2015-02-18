@@ -1,8 +1,0 @@
-// this files imports page-specific scss files
-// this has to be done manually, because sass imports are static
-// each page has its own .scss file in the page-specific folder
-
-body#homepage { @import "page-specific/homepage"; }
-body#contact { @import "page-specific/contact"; }
-// ...
-
