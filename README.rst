@@ -31,15 +31,14 @@ To install Grunt, run::
 
     $ npm install grunt
 
-Then prepare the sources for deploy to Github Pages::
+Deploying to Github Pages
+-----
 
-    $ git checkout gh-pages
+Before deploying, make sure your changes are merged into the master branch. Then to deploy to Github Pages, simply use::
+
     $ grunt deploy
-    $ git add .
-    $ git commit -sm "<your message>"
-    $ git push
 
-This will first checkout the correct branch (``gh-pages``), next it will prepare your sources and finally you have to add, commit & push those changes in the ``gh-pages`` branch.
+This will merge ``master`` branch with ``gh-pages`` branch, copy the necessary vendor files, commit them and finally push to Github.
 
 
 .. _NodeJS: http://nodejs.org/
