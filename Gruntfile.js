@@ -11,6 +11,15 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+        gitmerge: {
+            master: {
+                options: {
+                    branch: "master",
+                    noff: true,
+                    noEdit: true
+                }
+            }
+        },
 		generate: {
 			files: {
 				// src: dest
@@ -19,12 +28,37 @@ module.exports = function(grunt) {
 				'js/vendor/jquery/dist/jquery.min.js': 'js/jquery.min.js',
 				'js/vendor/modernizr/modernizr.js': 'js/modernizr.js'
 			}
-		}
+		},
+        gitadd: {
+            all: {
+                options: {
+                    force: false,
+                    all: true
+                }
+            }
+        },
+        gitcommit: {
+            ghpages: {
+                options: {
+                    message: 'Deploying...',
+                    noVerify: true,
+                    noStatus: false
+                }
+            }
+        },
+        gitpush: {
+            origin: {
+                options: {
+                    remote: "origin",
+                    branch: "gh-pages"
+                }
+            }
+        }
 	});
 
 
 	// deploy
-	grunt.registerTask("deploy", ["gitcheckout:ghpages", "generate"]);
+	grunt.registerTask("deploy", ["gitcheckout:ghpages", "gitmerge:master", "generate", "gitadd:all", "gitcommit:ghpages"/*, "gitpush:origin"*/]);
 
 	grunt.registerTask("generate", function(){
 		grunt.log.writeln('Generating files...');
@@ -32,8 +66,10 @@ module.exports = function(grunt) {
 		var files = grunt.config.get(this.name + '.files');
 		for (var src in files) {
 			var dest = files[src];
-			grunt.file.copy(src, dest);
-			grunt.log.writeln("Copying [" + src + "] to [" + dest + "]").ok();
+            if (!grunt.file.exists(dest)) {
+                grunt.file.copy(src, dest);
+                grunt.log.writeln("Copying [" + src + "] to [" + dest + "]").ok();
+            }
 		}
 	});
 
