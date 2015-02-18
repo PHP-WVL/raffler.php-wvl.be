@@ -58,7 +58,7 @@ module.exports = function(grunt) {
 
 
 	// deploy
-	grunt.registerTask("deploy", ["gitcheckout:ghpages", "gitmerge:master", "generate", "gitadd:all", "gitcommit:ghpages"/*, "gitpush:origin"*/]);
+	grunt.registerTask("deploy", ["gitcheckout:ghpages", "gitmerge:master", "generate", "gitadd:all", "gitcommit:ghpages", "gitpush:origin"]);
 
 	grunt.registerTask("generate", function(){
 		grunt.log.writeln('Generating files...');
