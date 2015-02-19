@@ -1,22 +1,4 @@
-if (typeof jQuery === 'undefined') {
-    throw new Error('JoindIN requires jQuery to function properly');
-}
-
-if (typeof Array.prototype.unique === 'undefined') {
-    Array.prototype.unique = function() {
-        var a = this.concat();
-        for(var i=0; i<a.length; ++i) {
-            for(var j=i+1; j<a.length; ++j) {
-                if(a[i] === a[j])
-                    a.splice(j--, 1);
-            }
-        }
-
-        return a;
-    };
-}
-
-(function($){
+define(['jquery', 'unique'], function ($) {
     'use strict';
 
     /**
@@ -26,13 +8,8 @@ if (typeof Array.prototype.unique === 'undefined') {
      *
      * @return void
      */
-    function JoindIN(meetup, options) {
+    function JoindIN(options) {
         this.meetup = null;
-        if (meetup instanceof Meetup) {
-            this.setMeetup(meetup);
-        } else {
-            options = meetup;
-        }
 
         if (typeof options === 'undefined') {
             options = {};
@@ -57,21 +34,6 @@ if (typeof Array.prototype.unique === 'undefined') {
 
         this._mergeObjectData(this.options, options);
     }
-
-    /**
-     * Setter for the Meetup object
-     *
-     * @param meetup Object - The Meetup object
-     *
-     * @return JoindIN - Current instance for chaining
-     */
-    JoindIN.prototype.setMeetup = function setMeetup(meetup) {
-        if (meetup instanceof Meetup) {
-            this.meetup = meetup;
-        }
-
-        return this;
-    };
 
     /**
      * Returns a list of all commenters of given event
@@ -100,45 +62,10 @@ if (typeof Array.prototype.unique === 'undefined') {
                       commenters = commenters.unique();
                   }
 
-                  // cross check
-                  if (self.isMeetupEvent(eventDetails)) {
-                      var meetupPromise = self.meetup.getRsvpsFromEventUrl(eventDetails[self.options.api.urlField]);
-                      meetupPromise.done(function(rsvps) {
-                          // filter out all commenters not present in rsvps
-                          var filtered = [];
-                          for (var i = 0; i < commenters.length; i++) {
-                              if (-1 !== rsvps.indexOf(commenters[i])) {
-                                  filtered.push(commenters[i]);
-                              }
-                          }
-
-                          // resolve!
-                          dfrd.resolve(filtered);
-                      });
-                  } else {
-                      // resolve!
-                      dfrd.resolve(commenters);
-                  }
+                  dfrd.resolve(commenters);
               });
 
         return promise;
-    };
-
-    /**
-     * Returns if given event is also a Meetup event
-     *
-     * @param eventDetails Object - Event data
-     *
-     * @return boolean
-     */
-    JoindIN.prototype.isMeetupEvent = function isMeetupEvent(eventDetails) {
-        var self = this;
-
-        var varPattern = /meetup\.com/;
-        return (self.meetup instanceof Meetup
-                && typeof eventDetails[self.options.api.urlField] !== 'undefined'
-                && null !== eventDetails[self.options.api.urlField]
-                && eventDetails[self.options.api.urlField].match(varPattern));
     };
 
     /**
@@ -441,6 +368,6 @@ if (typeof Array.prototype.unique === 'undefined') {
         return obj1;
     };
 
-    window.JoindIN = JoindIN;
+    return JoindIN;
 
-})(jQuery);
+});
