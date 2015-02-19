@@ -47,7 +47,8 @@ module.exports = function(grunt) {
                 options: {
                     message: 'Deploying...',
                     noVerify: true,
-                    noStatus: false
+                    noStatus: false,
+                    allowEmpty: true
                 }
             }
         },
