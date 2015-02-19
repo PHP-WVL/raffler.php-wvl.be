@@ -9,6 +9,11 @@ module.exports = function(grunt) {
 				options: {
 					branch: "gh-pages"
 				}
+			},
+			master: {
+				options: {
+					branch: "master"
+				}
 			}
 		},
         gitmerge: {
@@ -58,7 +63,7 @@ module.exports = function(grunt) {
 
 
 	// deploy
-	grunt.registerTask("deploy", ["gitcheckout:ghpages", "gitmerge:master", "generate", "gitadd:all", "gitcommit:ghpages", "gitpush:origin"]);
+	grunt.registerTask("deploy", ["gitcheckout:ghpages", "gitmerge:master", "generate", "gitadd:all", "gitcommit:ghpages", "gitpush:origin", "gitcheckout:master"]);
 
 	grunt.registerTask("generate", function(){
 		grunt.log.writeln('Generating files...');
