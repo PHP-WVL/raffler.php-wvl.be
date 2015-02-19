@@ -16,7 +16,7 @@ if (typeof Array.prototype.unique === 'undefined') {
 	};
 }
 
-(function($, Handlebars){
+(function(){
 	'use strict';
 	
 	/**
@@ -27,7 +27,7 @@ if (typeof Array.prototype.unique === 'undefined') {
 	 *
 	 * @return void
 	 */
-	function Raffler(joindIN, options) {
+	function Raffler(joindIN, Handlebars, options) {
 		this.options = {
 			selectors: {
 				btnEventIDSubmit: '#btnRaffle',
@@ -68,6 +68,7 @@ if (typeof Array.prototype.unique === 'undefined') {
 			return;
 		}
 		this.api = joindIN;
+        this.Handlebars = Handlebars;
 
 		if (typeof options === 'undefined') {
 			options = {};
@@ -141,7 +142,7 @@ if (typeof Array.prototype.unique === 'undefined') {
 		var self = this;
 
 		// Translate helper:
-		Handlebars.registerHelper('translate', function(s, params) {
+		self.Handlebars.registerHelper('translate', function(s, params) {
 			if (typeof params === 'undefined') {
 				params = {};
 			}
@@ -153,7 +154,7 @@ if (typeof Array.prototype.unique === 'undefined') {
 		for (var i=0; i < tpls.length; i++) {
 			var tpl = tpls[i];
 			var source   = $(self.options.templates[tpl]).html();
-			self.options.templates[tpl] = Handlebars.compile(source);
+			self.options.templates[tpl] = self.Handlebars.compile(source);
 		}
 	};
 
@@ -499,4 +500,4 @@ if (typeof Array.prototype.unique === 'undefined') {
 
 	window.Raffler = Raffler;
 
-})(jQuery, Handlebars);
+})();
