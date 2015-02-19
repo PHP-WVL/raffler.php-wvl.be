@@ -20,7 +20,7 @@
         }
     });
 
-    require(['jquery', 'bootstrap', 'modernizr', 'konami', 'unique']);
+    require(['jquery', 'bootstrap', 'modernizr', 'konami']);
 
     require(
         ['joindin', 'raffler', 'dynamicPages'],
