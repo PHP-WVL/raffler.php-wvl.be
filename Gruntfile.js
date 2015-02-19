@@ -33,7 +33,8 @@ module.exports = function(grunt) {
 				'js/vendor/jquery/dist/jquery.min.js': 'js/jquery.min.js',
 				'js/vendor/modernizr/modernizr.js': 'js/modernizr.js',
                 'js/vendor/requirejs/require.js': 'js/require.js',
-                'js/vendor/openraffler/src/raffler.js': 'js/raffler.js'
+                'js/vendor/openraffler/src/raffler.js': 'js/raffler.js',
+                'js/vendor/openraffler/src/drivers/joindin.js': 'js/joindin.js'
 			}
 		},
         gitadd: {
