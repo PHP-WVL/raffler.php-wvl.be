@@ -2,10 +2,10 @@
     requirejs.config({
         baseUrl: 'js',
         paths: {
-            'jquery': 'vendor/jquery/dist/jquery.min',
-            'bootstrap': 'vendor/bootstrap/dist/js/bootstrap.min',
-            'handlebars': 'vendor/handlebars/handlebars.min',
-            'modernizr': 'vendor/modernizr/modernizr'
+            'jquery': 'jquery.min',
+            'bootstrap': 'bootstrap.min',
+            'handlebars': 'handlebars.min',
+            'modernizr': 'modernizr'
         },
         shim: {
             'bootstrap': ['jquery'],
