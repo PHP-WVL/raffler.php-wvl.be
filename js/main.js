@@ -9,18 +9,6 @@
         },
         shim: {
             'bootstrap': ['jquery'],
-            'joindin': {
-                deps: ['jquery'],
-                exports: 'JoindIN'
-            },
-            'meetup': {
-                deps: ['jquery'],
-                exports: 'Meetup'
-            },
-            'raffler': {
-                deps: ['jquery', 'handlebars', 'joindin', 'meetup'],
-                exports: 'Raffler'
-            },
             'konami': {
                 deps: ['jquery'],
                 exports: 'Konami'
@@ -32,12 +20,14 @@
         }
     });
 
+    require(['jquery', 'bootstrap', 'modernizr', 'konami', 'unique']);
+
     require(
-        ['jquery', 'bootstrap', 'handlebars', 'modernizr', 'joindin', 'meetup', 'raffler', 'dynamicPages', 'konami'],
-        function($, Bootstrap, Handlebars, Modernizr, JoindIN, Meetup, Raffler, dynamicPages, Konami){
+        ['joindin', 'raffler', 'dynamicPages'],
+        function(JoindIN, Raffler, dynamicPages){
             $(function(){
                 var joindIn = new JoindIN();
-                var raffler = new Raffler(joindIn, Handlebars);
+                var raffler = new Raffler(joindIn);
                 dynamicPages.init();
             });
         }
