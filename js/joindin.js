@@ -31,10 +31,22 @@ define(['jquery'], function ($) {
 
         this.options = {
             weighted: true, // when true, the more you comment, the more chance you have of being picked
+            filters: {
+                comment: {
+                    maxTimeWindow: false // time frame to grab comments from; "2 weeks" = maxmimum 2 weeks after event
+                }
+            },
             api: {
                 version: 'v2.1',
-                nameField: 'user_display_name', // what's the name of the field which holds the commenter's name?
-                urlField: 'href', // what's the name of the field which holds the event's URL?
+                fields: {
+                    comment: {
+                        name: 'user_display_name', // what's the name of the field which holds the commenter's name?
+                        createDate: 'created_date' // creation date of the comment
+                    },
+                    event: {
+                        endDate: 'end_date' // event's end date
+                    }
+                },
                 amountPerPage: 20, // amount of comments per page of comments
                 url: {
                     base: 'http://api.joind.in/{api.version}',
@@ -196,6 +208,10 @@ define(['jquery'], function ($) {
                 'talks',
                 this._mergeObjectData({eventID: eventID}, this.options)
                 );
+        var urlEvent = this._getUrl(
+                'event',
+                this._mergeObjectData({eventID: eventID}, this.options)
+                );
 
         var self = this;
 
@@ -211,11 +227,18 @@ define(['jquery'], function ($) {
         // async get the event comments & all the talk URL's:
         $.when(
                 this._doRequest(urlEventComments),
-                this._doRequest(urlTalks)
-              ).done(function(resultEventComments, resultTalks){
+                this._doRequest(urlTalks),
+                this._doRequest(urlEvent)
+              ).done(function(resultEventComments, resultTalks, resultEvent){
+                  // extract event
+                  var eventData = {};
+                  if (resultEvent[1] === 'success') {
+                      eventData = self._extractEvent(resultEvent[0]);
+                  }
+
                   // extract comments from the Event:
                   if (resultEventComments[1] === 'success') {
-                      commenters = commenters.concat(self._extractComments(resultEventComments[0]));
+                      commenters = commenters.concat(self._extractComments(eventData, resultEventComments[0]));
                   }
 
                   // fetch all talks with comments:
@@ -235,7 +258,7 @@ define(['jquery'], function ($) {
                       // the "done" method on the returned promise
                       grouped.done(function() {
                           for (var i = 0; i < arguments.length; i++) {
-                              commenters = commenters.concat(self._extractComments(arguments[i][0]));
+                              commenters = commenters.concat(self._extractComments(eventData, arguments[i][0]));
                           }
 
                           commenters = commenters.filter(function(el){
@@ -278,16 +301,53 @@ define(['jquery'], function ($) {
     };
 
     /**
+     * Extracts the event data from the result
+     *
+     * @param data Array
+     *
+     * @return Object - Event data
+     */
+    JoindIN.prototype._extractEvent = function _extractEvent(data) {
+        var self = this;
+
+        for (var i = 0; i < data.events.length; i++) {
+            return data.events[i];
+        }
+
+        return {};
+    };
+
+    /**
      * Extracts the commenters from given data
      *
+     * @param eventData Object
      * @param data Array
      *
      * @return Array - List of commenters
      */
-    JoindIN.prototype._extractComments = function _extractComments(data) {
+    JoindIN.prototype._extractComments = function _extractComments(eventData, data) {
+        var self = this;
         var commenters = [];
+        var eventEndDate = eventData[self.options.api.fields.event.endDate];
+        eventEndDate = new Date(eventEndDate);
+
         for (var i = 0; i < data.comments.length; i++) {
-            commenters.push(data.comments[i][this.options.api.nameField]);
+            var comment = data.comments[i];
+
+            // extra filtering:
+            if (false !== self.options.filters.comment.maxTimeWindow) {
+                var commentDate = comment[self.options.api.fields.comment.createDate];
+                commentDate = new Date(commentDate);
+
+                var timeDiff = (commentDate - eventEndDate)/1000;
+                var relativeTime = self.relativeTimeToSeconds(self.options.filters.comment.maxTimeWindow);
+                if (timeDiff > relativeTime) {
+                    // skip this comment: too old
+                    continue;
+                }
+            }
+
+            commenters.push(comment[self.options.api.fields.comment.name]);
         }
 
         // Only unique commenters per data set are returned:
@@ -347,6 +407,44 @@ define(['jquery'], function ($) {
         }
 
         return url;
+    };
+
+    /**
+     * Translates given relative time to seconds
+     *
+     * "1year 1month 2weeks 6days 17hours 28mins 41secs"
+     *
+     * @param x string
+     *
+     * @return int
+     */
+    JoindIN.prototype.relativeTimeToSeconds = function relativeTimeToSeconds(x) {
+        var times = {
+            year: 31536000,
+            years: 31536000,
+            month: 2419200,
+            months: 2419200,
+            week: 604800,
+            weeks: 604800,
+            day: 86400,
+            days: 86400,
+            hour: 3600,
+            hours: 3600,
+            min: 60,
+            mins: 60,
+            sec: 1,
+            secs: 1
+        };
+
+        var relativeTime = 0;
+        var parts = x.split(' ');
+
+        for (var i=0;i<parts.length;i++) {
+            var amount = parseInt(parts[i]);
+            var name = parts[i].replace(amount, '');
+            relativeTime += amount * times[name];
+        }
+        return relativeTime;
     };
 
     /**

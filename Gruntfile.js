@@ -75,10 +75,11 @@ module.exports = function(grunt) {
 		var files = grunt.config.get(this.name + '.files');
 		for (var src in files) {
 			var dest = files[src];
-            if (!grunt.file.exists(dest)) {
-                grunt.file.copy(src, dest);
-                grunt.log.writeln("Copying [" + src + "] to [" + dest + "]").ok();
-            }
+            if (grunt.file.exists(dest)) {
+				grunt.file.delete(dest, {force:true});
+			}
+			grunt.file.copy(src, dest);
+			grunt.log.writeln("Copying [" + src + "] to [" + dest + "]").ok();
 		}
 	});
 
