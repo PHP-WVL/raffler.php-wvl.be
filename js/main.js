@@ -26,7 +26,13 @@
         ['joindin', 'raffler', 'dynamicPages'],
         function(JoindIN, Raffler, dynamicPages){
             $(function(){
-                var joindIn = new JoindIN();
+                var joindIn = new JoindIN({
+					filters: {
+						comment: {
+							maxTimeWindow: "3weeks"
+						}
+					}
+				});
                 var raffler = new Raffler(joindIn);
                 dynamicPages.init();
             });
